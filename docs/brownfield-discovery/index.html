@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>brownfield-discovery</title>
+<style>
+:root{color-scheme:light dark;--bg:#fff;--fg:#1a1d22;--mut:#5d6570;--line:#e3e6ea;--acc:#2f6df6;--code:#f5f7fa}
+@media(prefers-color-scheme:dark){:root{--bg:#14171c;--fg:#e7eaee;--mut:#9aa3ae;--line:#2a2f37;--acc:#6fa0ff;--code:#1c2027}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);
+font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+.wrap{max-width:760px;margin:0 auto;padding:48px 24px 80px}
+h1{font-size:28px;margin:0 0 6px;letter-spacing:-.4px}
+.sub{color:var(--mut);margin:0 0 32px}
+h2{font-size:19px;margin:34px 0 10px}
+p{margin:0 0 14px}a{color:var(--acc)}
+code,pre{background:var(--code);border-radius:6px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px}
+code{padding:2px 6px}pre{padding:12px 14px;overflow-x:auto;margin:0 0 14px}
+ul{margin:0 0 14px;padding-left:20px}li{margin-bottom:5px}
+table{border-collapse:collapse;width:100%;margin:0 0 14px;font-size:14.5px}
+th,td{border:1px solid var(--line);padding:7px 10px;text-align:left}
+th{font-weight:600}
+.big{border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin:0 0 20px}
+.back{font-size:14px;color:var(--mut);text-decoration:none;display:inline-block;margin-bottom:22px}
+</style></head><body><div class="wrap">
+
+<a class="back" href="../">&larr; demotools</a>
+<h1>brownfield-discovery</h1>
+<p class="sub">Investigate an unfamiliar codebase and write down what you found.</p>
+
+<div class="big">
+<p style="margin:0"><strong>Paste-ready prompt</strong><br>
+<a href="prompt.txt">skobarx.github.io/demotools/brownfield-discovery/prompt.txt</a><br>
+<span style="color:var(--mut);font-size:14px">Works in any assistant that can read the repository. No install.</span></p>
+</div>
+
+<h2>The design decision that matters</h2>
+<p>It investigates <em>before</em> it reads the documentation. Phases one to four never open
+<code>README.md</code>, <code>CLAUDE.md</code>, <code>AGENTS.md</code> or <code>docs/</code>.
+Only after its own findings are written does it read them, and then it produces a verdict for every
+material claim: confirmed, stale, contradicted, missing, or an undocumented strength. Anything left
+unresolved goes back for another research pass.</p>
+<p>Existing documentation tells you what the authors believed was true, usually some time ago. An
+independent read is worth more, and the gap between the two is often the most useful finding in the
+repository.</p>
+
+<h2>What it produces</h2>
+<p>A <code>discovery/</code> folder split by topic, so you can open just the part you need or hand one
+file to someone else: summary, architecture, stack, git history, data, integrations, quality,
+observability, risks, the documentation delta, ranked open questions, and a drafted
+<code>AGENTS.proposed.md</code>.</p>
+<p>Diagrams are ASCII and sized to be redrawn by hand in under two minutes: annotated folder
+structure, a tier diagram marking every dependency pointing the wrong way, a module graph marking
+cycles, and an integration map showing direction, transport and whether each boundary has a
+translation layer.</p>
+
+<h2>Modes</h2>
+<table><tr><th>Mode</th><th>Phases</th><th>Output</th><th>Time</th></tr>
+<tr><td>Full (default)</td><td>all</td><td>12 files</td><td>20–40 min</td></tr>
+<tr><td><code>fast</code></td><td>1, 2, 5, 7</td><td>3 files</td><td>8–12 min</td></tr></table>
+
+<h2>Install for Claude Code</h2>
+<pre>git clone https://github.com/skobarx/demotools /tmp/dt
+mkdir -p ~/.claude/skills
+cp -r /tmp/dt/skills/brownfield-discovery ~/.claude/skills/</pre>
+<p>Then run <code>/brownfield-discovery</code>, or <code>/brownfield-discovery fast</code> when time is short.</p>
+
+<h2>Git forensics on its own</h2>
+<p><a href="git-forensics.sh">git-forensics.sh</a> — read-only, runs standalone. Change hot spots by
+file and directory, commit volume by month, contributor cohorts and when each first appeared,
+ownership and bus factor, hotfix and revert clusters, release cadence, merge patterns, active and
+stale branches, dependency and framework shifts, dormant areas, largest files, debt markers.</p>
+<pre>./git-forensics.sh 12   # months of history, default 12</pre>
+
+<h2>Reference</h2>
+<ul>
+<li><a href="skill.md">skill.md</a> — the full method, all seven phases</li>
+<li><a href="prompt.txt">prompt.txt</a> — the same thing as one paste-able message</li>
+<li><a href="https://github.com/skobarx/demotools/tree/main/skills/brownfield-discovery">source on GitHub</a></li>
+</ul>
+
+</div></body></html>
